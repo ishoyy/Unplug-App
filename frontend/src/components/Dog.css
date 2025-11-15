@@ -1,0 +1,18 @@
+.pet-container{
+    animation: walk 5s linear infinite alternate;
+    display: flex;
+    flex-direction: column; /* Stack health bar above dog */
+    align-items: center; /* Center health bar above dog */
+    margin-top:50vh;
+    position:absolute;
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+.health-bar{
+    position:relative;
+    top:100px;
+}
+
+
+

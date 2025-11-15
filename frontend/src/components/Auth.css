@@ -1,0 +1,319 @@
+
+/* General layout */
+*{
+  font-family: 'Courier New', Courier, monospace;
+
+}
+.auth-page {
+  background-color: #f0f2f500; /* Light gray background */
+  
+  min-height: 100vh;
+  padding: 40px 0;
+  position:absolute;
+   top:50%;
+   left:50%;
+   transform:translate(-50%,-40%);
+   z-index:1001;
+   
+}
+
+
+
+/* Main container (white box) */
+.auth-page .container {
+  background-image: linear-gradient(to bottom, rgba(255, 207, 104, 0.355), rgba(76, 213, 211, 0.263));
+  background-color: white;
+  border: 1px solid #dddfe2;
+  width:28vw;
+  height:40vh;
+  padding: 40px 35px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.4s ease;
+  position:relative;
+    border-style: solid;
+  border-color: rgb(61, 7, 7);
+  border-width:1px;
+}
+
+.auth-page .container:hover {
+  transform: translateY(-2px);
+}
+
+/* Logo / App title */
+.logo-img{
+    width:10vw;
+}
+
+/* Headings */
+.auth-page h2 {
+  color: #1c1e21;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+/* Inputs */
+.auth-page input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: 1px solid #ccd0d5;
+  background-color: #f5f6f7;
+  font-size: 15px;
+  transition: border 0.2s, background-color 0.2s;
+}
+
+.auth-page input:focus {
+  outline: none;
+  border-color: #1877f2;
+  background-color: #ffffff;
+}
+
+/* 🔵 Login button */
+.auth-page button[type="submit"] {
+  width: 100%;
+  background-color: #4fc1bbf8;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 12px;
+  margin-top: 10px;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.auth-page button[type="submit"]:hover {
+  background-color: #166fe5;
+  transform: translateY(-1px);
+}
+
+/* 🟢 Create Account button */
+.auth-page button.signup-btn {
+  width: 100%;
+  background-color: #de8f28;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 12px;
+  margin-top: 12px;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.auth-page button.signup-btn:hover {
+  background-color: #36a420;
+  transform: translateY(-1px);
+}
+
+/* Secondary (Back to Login) */
+.auth-page button.back-btn {
+  width: 100%;
+  background-color: #e4e6eb;
+  color: #050505;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 12px;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.auth-page button.back-btn:hover {
+  background-color: #d8dadf;
+}
+
+/* Links */
+.auth-page .link-text,
+.auth-page .forgot {
+  color: #1877f2;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.auth-page .link-text:hover,
+.auth-page .forgot:hover {
+  text-decoration: underline;
+  color: #166fe5;
+}
+
+/* Divider */
+.auth-page .or-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #8e8e8e;
+  font-size: 13px;
+  margin: 18px 0;
+}
+
+.auth-page .or-divider::before,
+.auth-page .or-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #dddfe2;
+  margin: 0 10px;
+}
+
+/* Footer box */
+.auth-page .footer-box {
+  background-color: #ffffff;
+  border: 1px solid #dddfe2;
+  width: 360px;
+  text-align: center;
+  margin-top: 10px;
+  padding: 18px 0;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.auth-page .footer-box a {
+  color: #1877f2;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-page .footer-box a:hover {
+  text-decoration: underline;
+}
+
+/* Messages */
+.auth-page .message-error {
+  color: #d93025;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.auth-page .message-success {
+  color: #1877f2;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   Signup Page
+   =============================== */
+
+
+.signup-page {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f0f2f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 0;
+}
+
+
+.signup-page .container {
+  background-color: #ffffff;
+  border: 1px solid #dddfe2;
+  width: 360px;
+  padding: 40px 35px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.4s ease;
+}
+
+.signup-page .container:hover {
+  transform: translateY(-2px);
+}
+
+
+.signup-page .logo {
+  font-family: "Pacifico", cursive;
+  font-size: 44px;
+  color: #1c1e21;
+  letter-spacing: 0.3px;
+  margin-bottom: 30px;
+}
+
+
+.signup-page input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: 1px solid #ccd0d5;
+  background-color: #f5f6f7;
+  font-size: 15px;
+  transition: border 0.2s, background-color 0.2s;
+}
+
+.signup-page input:focus {
+  outline: none;
+  border-color: #1877f2;
+  background-color: #ffffff;
+}
+
+
+.signup-page button.signup-btn {
+  width: 100%;
+  background-color: #42b72a;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 12px;
+  margin-top: 12px;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.signup-page button.signup-btn:hover {
+  background-color: #36a420;
+  transform: translateY(-1px);
+}
+
+
+.signup-page .message-success {
+  color: #1877f2;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.signup-page .message-error {
+  color: #d93025;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+
+.signup-page .link-text {
+  color: #1877f2;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.signup-page .link-text:hover {
+  text-decoration: underline;
+  color: #166fe5;
+}

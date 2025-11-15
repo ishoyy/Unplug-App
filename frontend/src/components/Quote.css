@@ -1,0 +1,14 @@
+.quote{
+    padding:10px;
+    text-align:center;
+    
+    font-size:16px;        
+    border-radius: 5px;
+     color:rgb(69, 3, 3);
+    position:absolute;
+    min-block-size: 10vh;
+-webkit-tap-highlight-color: transparent;
+
+        
+
+}

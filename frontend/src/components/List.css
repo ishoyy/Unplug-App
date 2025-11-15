@@ -1,0 +1,79 @@
+
+
+.treat-list{
+    font-family:'Courier New', Courier, monospace;
+    text-align:center;
+    margin-top:100px;
+}
+
+
+button{
+    font-size:1.7rem;
+    padding:10px 20px;
+    color: white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    transition:backgground-color 0.5s ease;
+}
+
+li{
+    font-size:2rem;
+    font-weight:bold;
+    padding:15px;
+    background-color:rgb(255, 255, 248);
+    margin-bottom:10px;
+    border: 3px solid black;
+    border-radius:5px;
+    display:flex;
+    align-items:center;
+
+}
+
+.text{
+    flex:1;
+}
+
+.add-button{
+    background-color:rgb(255, 157, 0);
+    margin:10px;
+}
+.add-button:hover{
+    background-color:rgb(64, 179, 197);
+}
+
+.delete-button{
+    background-color:red;
+}
+
+
+.delete-button, .up-button, .down-button,.edit-button,.save-button,.cancel-button{
+    padding: 8px 12px;
+    font-size:1.4rem;
+    margin-left:10px;
+
+}
+
+input[type="text"]{
+font-size:1.6rem;
+padding:10px;
+border: 2px solid black;
+border-radius:5%;
+}
+
+
+ol{
+    padding:0;
+}
+
+.back-button{
+    position:fixed;
+    left:1vw;
+    top:3vh;
+    
+}
+
+.title{
+    font-size:2.0rem;
+    background-image:url(../images/text-bg.png);
+}
