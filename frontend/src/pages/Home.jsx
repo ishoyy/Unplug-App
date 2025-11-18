@@ -177,7 +177,7 @@ export default function Home() {
           hideLogin={()=>setLoginIsVisible(false)}
           showSignup={()=>setSignupIsVisible(true)}
         />
-      )}      {signupIsVisible && <Signup hideSignup={()=>setSignupIsVisible(false)} showLogin={()=>setLoginIsVisible(true)}
+      )}   {signupIsVisible && <Signup hideSignup={()=>setSignupIsVisible(false)} showLogin={()=>setLoginIsVisible(true)}
 />}
 
     

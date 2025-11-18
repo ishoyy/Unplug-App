@@ -42,7 +42,6 @@ export default function CalendarWrapper() {
   // write a check-in document for today
   async function handleCheckIn() {
 
-      newCoins = (checkins.length + 1) * 5;
 
     if (user) {
     const checkInRef = doc(db, "users", user.uid, "checkins", selectedDateStr);
@@ -50,7 +49,6 @@ export default function CalendarWrapper() {
       try {
           await setDoc(checkInRef, {
                 checkedin: true,
-                coins:newCoins,
               });
 
       } catch(err){

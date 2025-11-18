@@ -43,15 +43,19 @@ li{
 }
 
 .delete-button{
-    background-color:red;
+    color:rgb(0, 0, 0);
+    background:none;
 }
 
 
 .delete-button, .up-button, .down-button,.edit-button,.save-button,.cancel-button{
-    padding: 8px 12px;
-    font-size:1.4rem;
+    padding: 1px 12px;
     margin-left:10px;
+}
 
+.edit-button{
+    color:rgb(0, 185, 0);
+    background:none;
 }
 
 input[type="text"]{
@@ -76,4 +80,57 @@ ol{
 .title{
     font-size:2.0rem;
     background-image:url(../images/text-bg.png);
+}
+
+.coin-text{
+    font-size:1.6rem;
+    font-family:'Courier New', Courier, monospace;
+    padding:10px;
+    border: none;
+    border-bottom: 1px solid black;
+    border-radius:5%;
+    width:2rem;
+    outline:none;
+
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.coin-icon,.check-icon{
+    width:3rem;
+
+}
+
+.check-icon:hover,.delete-button:hover,.edit-button:hover{
+ filter: contrast(150%);
+  transform: translateY(-2px);
+}
+
+.question-icon{
+    position:relative;
+    width:3rem;
+    margin-right:20px;
+}
+
+.coin-icon, .question-icon {
+    animation: moveUpDown 1s linear infinite;
+
+}
+
+@keyframes moveUpDown{
+    0%, 100% {
+        bottom:0;
+    }
+    50% {
+        bottom:3px
+    }
+}
+
+.check-icon{
+    width:40px;
+    postition:relative;
 }

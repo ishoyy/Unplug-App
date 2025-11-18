@@ -2,10 +2,15 @@ import { useState, useEffect } from 'react';
 import "../components/List.css"
 import { db, auth } from "../../../FirebaseConfig"
 import { 
-    collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot 
+    collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot
 } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import { useAuthState } from "react-firebase-hooks/auth";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import CoinIcon from "../images/coin.png";
+import CheckIcon from "../images/checkmark.png";
+import QuestionIcon from "../images/question-mark.png";
 
 export default function List() {
 
@@ -13,6 +18,12 @@ export default function List() {
     const [newReward, setNewReward] = useState("");
     const [editingIndex, setEditingIndex] = useState(null);
     const [editingValue, setEditingValue] = useState("");
+
+    const [editCostIndex, setEditCostIndex] = useState(null);
+    const [editCostValue, setEditCostValue] = useState("");
+
+    const [enterAmountVisible, setEnterAmountVisible] = useState(true);
+
     const [user] = useAuthState(auth);
     const navigate = useNavigate();
 
@@ -62,7 +73,7 @@ export default function List() {
     }
 
     // -------------------------
-    // Save edited reward
+    // Save edited reward description
     // -------------------------
     async function saveReward(reward) {
         const ref = doc(db, "users", user.uid, "rewards", reward.id);
@@ -72,28 +83,42 @@ export default function List() {
         setEditingValue("");
     }
 
+    // -------------------------
+    // Save edited coin value
+    // -------------------------
+    async function saveCost(reward) {
+        const ref = doc(db, "users", user.uid, "rewards", reward.id);
+
+        await updateDoc(ref, {
+            coinValue: Number(editCostValue)
+        });
+
+        setEditCostIndex(null);
+        setEditCostValue("");
+
+    }
+
     function startEditing(index) {
         setEditingIndex(index);
         setEditingValue(rewards[index].description);
     }
 
-    function cancelEdit() {
-        setEditingIndex(null);
-        setEditingValue("");
+    function startEditingCost(index) {
+        setEditCostIndex(index);
+        setEditCostValue(rewards[index].coinValue);
     }
 
     function handleBackButton() {
         navigate("/");
     }
 
+
     return (
         <div className="treat-list-page">
-            
             <div className="treat-list">
                 <button className="back-button" onClick={handleBackButton}>back</button>
                 <div className="title">Treat List</div>
                 
-
                 <div>
                     <input 
                         type="text"
@@ -114,6 +139,7 @@ export default function List() {
                                         value={editingValue}
                                         onChange={(e) => setEditingValue(e.target.value)}
                                     />
+
                                     <button 
                                         className="save-button"
                                         onClick={() => saveReward(reward)}
@@ -122,7 +148,10 @@ export default function List() {
                                     </button>
                                     <button 
                                         className="cancel-button"
-                                        onClick={cancelEdit}
+                                        onClick={() => {
+                                            setEditingIndex(null);
+                                            setEditingValue("");
+                                        }}
                                     >
                                         Cancel
                                     </button>
@@ -130,17 +159,45 @@ export default function List() {
                             ) : (
                                 <>
                                     <span className="text">{reward.description}</span>
+
+                                    {/* COIN COST INPUT */}
+                                    <input 
+                                        type="number"
+                                        value={
+                                            editCostIndex === index
+                                                ? editCostValue
+                                                : reward.coinValue ?? 0
+                                        }
+                                        onChange={(e) => setEditCostValue(e.target.value)}
+                                        onFocus={() => startEditingCost(index)}
+                                        className="coin-text"
+                                    />
+
+                                    <div className='icon-container'>
+                                        <img className="coin-icon" src={CoinIcon} />
+
+                                        {/* Save cost button */}
+                                        <img 
+                                            className="check-icon" 
+                                            src={CheckIcon}
+                                            onClick={() => saveCost(reward)}
+                                        />
+
+                                        <img className="question-icon" src={QuestionIcon} />
+                                    </div>
+
                                     <button 
                                         className="delete-button"
                                         onClick={() => deleteReward(reward.id)}
                                     >
-                                        Delete
+                                        <DeleteIcon fontSize="small"/>
                                     </button>
+
                                     <button 
                                         className="edit-button"
                                         onClick={() => startEditing(index)}
                                     >
-                                        Edit
+                                        <EditIcon fontSize='small'/>
                                     </button>
                                 </>
                             )}
