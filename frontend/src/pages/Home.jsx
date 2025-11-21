@@ -13,7 +13,7 @@ import Stickynote from "../images/stickynote.png"
 import Notebook from "../images/notebook.png"
 import Logo from "../images/logo.png"
 import House from "../images/home.png"
-import { auth} from "../../../FirebaseConfig"
+import { auth } from "../../../FirebaseConfig"
 import { useNavigate } from "react-router-dom"
 import { signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -28,7 +28,7 @@ const style = {
   background: "#f0f0f0",
   position: "absolute",
   zIndex: 1000,
-  
+
   backgroundImage: "linear-gradient(to bottom, rgba(227, 187, 102, 0.569), rgba(76, 213, 211, 0.476))",
   boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)"
 };
@@ -55,7 +55,7 @@ export default function Home() {
   };
 
   const handleClickCloseIcon = () => {
-        setQuoteBoxIsVisible(!quoteBoxIsVisible);
+    setQuoteBoxIsVisible(!quoteBoxIsVisible);
 
   }
 
@@ -68,35 +68,35 @@ export default function Home() {
     }
   };
 
-      const [user,loading]= useAuthState(auth);
-      if (loading) return <p>Loading...</p>
+  const [user, loading] = useAuthState(auth);
+  if (loading) return <p>Loading...</p>
 
   const handleClickNotebook = () => {
 
-   /* if (!user) {
-        alert("Create account to make a notebook!")
-        setSignupIsVisible(true);
-        return;
-    } */
+    /* if (!user) {
+         alert("Create account to make a notebook!")
+         setSignupIsVisible(true);
+         return;
+     } */
 
-        navigate("/notebook")
+    navigate("/notebook")
   }
-  
 
 
 
-   
+
+
   return (
     <div className="bg-content">
-    <div className="navbar">
-     
+      <div className="navbar">
+
         <img
           src={House}
           className="house"
-          
+
         />
-       
-        
+
+
         <img
           src={Logo}
           className="logo"
@@ -106,53 +106,53 @@ export default function Home() {
         <img
           src={Notebook}
           className="notebook"
-                    onClick={handleClickNotebook}
-                 
+          onClick={handleClickNotebook}
+
         />
 
 
-  <img
+        <img
           src={Stickynote}
           className="sticky-note"
-         onClick={handleClickCloseIcon}
+          onClick={handleClickCloseIcon}
 
         />
 
       </div>
       <Rnd
-  minHeight="150px"
-  minWidth="200px"
-  style={{
-    ...style,
-    display: quoteBoxIsVisible ? "flex" : "none",
-  }}
-  default={{
-    x: 10,
-    y: 150,
-    width: 200,
-    height: 200,
-  }}
->
-  <div style={{ position: "relative", width:"100%", height:"100%" }}>
-    <CloseIcon className="close-icon"
-      style={{
-        position: "absolute",
-        top: "2px",
-        right: "2px",
-        cursor: "pointer",
-        color: '#7e270aff',
-        backgroundColor: "#ffb235f8",
-        borderRadius: "50%",
-        zIndex:"1001",
-        width:"20px",
-        height:"20px",
+        minHeight="150px"
+        minWidth="200px"
+        style={{
+          ...style,
+          display: quoteBoxIsVisible ? "flex" : "none",
+        }}
+        default={{
+          x: 10,
+          y: 150,
+          width: 200,
+          height: 200,
+        }}
+      >
+        <div style={{ position: "relative", width: "100%", height: "100%" }}>
+          <CloseIcon className="close-icon"
+            style={{
+              position: "absolute",
+              top: "2px",
+              right: "2px",
+              cursor: "pointer",
+              color: '#7e270aff',
+              backgroundColor: "#ffb235f8",
+              borderRadius: "50%",
+              zIndex: "1001",
+              width: "20px",
+              height: "20px",
 
-      }}
-      onClick={() => setQuoteBoxIsVisible(false)}
-    />
-    <Quote /> 
-  </div>
-</Rnd>
+            }}
+            onClick={() => setQuoteBoxIsVisible(false)}
+          />
+          <Quote />
+        </div>
+      </Rnd>
 
 
       <CalendarWrapper />
@@ -160,7 +160,7 @@ export default function Home() {
 
       <div className="loggedInAs">{user && (<div><p>Logged in as {user.email}</p> <button className="logout-button" onClick={handleLogout}>Logout</button></div>)}</div>
 
-       {loginSignupBttnsAreVisible && !user && (
+      {loginSignupBttnsAreVisible && !user && (
         <div className="bttn-container">
           <button className="login-button" onClick={handleClickLogin}>Login</button>
           <button className="signup-button" onClick={handleClickRegister}>Signup</button>
@@ -168,20 +168,20 @@ export default function Home() {
       )}
 
       {/* Conditionally render components */}
-{loginIsVisible && (
+      {loginIsVisible && (
         <Login
           onSuccess={() => {
             setLoginIsVisible(false);
             setLoginSignupBttnsAreVisible(false); // ← hides buttons
-          }} 
-          hideLogin={()=>setLoginIsVisible(false)}
-          showSignup={()=>setSignupIsVisible(true)}
+          }}
+          hideLogin={() => setLoginIsVisible(false)}
+          showSignup={() => setSignupIsVisible(true)}
         />
-      )}   {signupIsVisible && <Signup hideSignup={()=>setSignupIsVisible(false)} showLogin={()=>setLoginIsVisible(true)}
-/>}
+      )}   {signupIsVisible && <Signup hideSignup={() => setSignupIsVisible(false)} showLogin={() => setLoginIsVisible(true)}
+      />}
 
-    
-    
+
+
     </div>
   );
 }

@@ -19,16 +19,18 @@ export default function Pet() {
   }, [position]);
 
   return (
-    <div className="pet-container" style={{ 
-            position:"absolute",  
-          top: position.top,
-          left: position.left,
-          transition: "all 10s ease",}}>
+    <div className="pet-container" style={{
+      position: "absolute",
+      top: position.top,
+      left: position.left,
+      transition: "all 10s ease",
+    }}>
       <img
         src={healthBar}
         alt="health bar"
-        
-        style={{ width: "20vh",
+
+        style={{
+          width: "20vh",
         }}
         className="health-bar"
       />
@@ -39,7 +41,7 @@ export default function Pet() {
         className="dog"
         style={{
           width: "40vh",
-        transform:faceRight ? "scaleX(-1)": "scaleX(1)",
+          transform: faceRight ? "scaleX(-1)" : "scaleX(1)",
 
         }}
       />

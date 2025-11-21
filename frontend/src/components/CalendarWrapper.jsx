@@ -3,8 +3,8 @@ import './CalendarWrapper.css';
 import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
-import { doc, setDoc, collection, onSnapshot, updateDoc, deleteDoc,increment, getDocs} from 'firebase/firestore';
-import { db, auth} from "../../../FirebaseConfig"
+import { doc, setDoc, collection, onSnapshot, updateDoc, deleteDoc, increment, getDocs } from 'firebase/firestore';
+import { db, auth } from "../../../FirebaseConfig"
 import { useAuthState } from "react-firebase-hooks/auth";
 import { onAuthStateChanged } from 'firebase/auth';
 import Candy from "../images/candy.png";
@@ -21,7 +21,7 @@ const CheckInButton = styled(Button)({
   transition: 'transform 0.2s ease, box-shadow 0.2s ease',
   marginLeft: '45vw',
   marginTop: '15vh',
-  zIndex:"1001",
+  zIndex: "1001",
   '&:hover': {
     backgroundColor: '#ffd633',
     transform: 'translateY(-2px)',
@@ -46,19 +46,19 @@ export default function CalendarWrapper() {
 
 
     if (user) {
-    // build a reference to a document path
-    // users/{userID}/checkins/{selectedDateStr}
-    // checkin -> create date that has its own documnt ID
-    const checkInRef = doc(db, "users", user.uid, "checkins", selectedDateStr);
+      // build a reference to a document path
+      // users/{userID}/checkins/{selectedDateStr}
+      // checkin -> create date that has its own documnt ID
+      const checkInRef = doc(db, "users", user.uid, "checkins", selectedDateStr);
 
-      
-    try {
+
+      try {
         // write data to the document at checkInRef {users/{userID}/checkins/{selectedDateStr}}
-          await setDoc(checkInRef, {
-                checkedin: true,
-              }, {merge:true});
+        await setDoc(checkInRef, {
+          checkedin: true,
+        }, { merge: true });
 
-      } catch(err){
+      } catch (err) {
         console.log("Check-in failed");
       }
 
@@ -68,19 +68,19 @@ export default function CalendarWrapper() {
 
 
     // if the previous paramater does not include the selected date string, return the array of checkins included prev + sDS
-  setCheckins(prev => {
-    if (!prev.includes(selectedDateStr)) return [...prev, selectedDateStr];
-    return prev;
-  });
+    setCheckins(prev => {
+      if (!prev.includes(selectedDateStr)) return [...prev, selectedDateStr];
+      return prev;
+    });
 
 
-    const userRef = doc(db,"users", user.uid);
+    const userRef = doc(db, "users", user.uid);
 
     try {
-        await setDoc(userRef,{
-            totalCoins: increment(5),
-        },{merge:true});
-    } catch(err){
+      await setDoc(userRef, {
+        totalCoins: increment(5),
+      }, { merge: true });
+    } catch (err) {
       console.log("Saving total coin count failed");
     }
 
@@ -88,108 +88,108 @@ export default function CalendarWrapper() {
 
   // when a user is logged in, listen ot their check-ins collections
   useEffect(() => {
- 
-      if (user){
+
+    if (user) {
       const ref = collection(db, "users", user.uid, "checkins");
       const unsub = onSnapshot(ref, (snap) => {
-          const days = snap.docs.map((doc) => doc.id);
-         setCheckins(days);
+        const days = snap.docs.map((doc) => doc.id);
+        setCheckins(days);
 
       },
-          (err) => console.error('Snapshot error',err)
-  );
-        return () => unsub();
+        (err) => console.error('Snapshot error', err)
+      );
+      return () => unsub();
 
-      }
-  },[user])
+    }
+  }, [user])
 
 
   // when disconnecting from data in firebase, set checkins to be an emptu arrau
-    useEffect(()=> {
-      const unsub = onAuthStateChanged(auth, (u) => {
-        setCheckins([]);
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setCheckins([]);
+    });
+
+    return () => unsub();
+  }, []);
+
+
+
+  async function handleResetCheckins() {
+    if (!user) return;
+
+    try {
+      const checkinsRef = collection(db, "users", user.uid, "checkins");
+
+      // get all check-in documents
+      const snapshot = await getDocs(checkinsRef);
+
+      // delete each document
+      const deletions = snapshot.docs.map(d =>
+        deleteDoc(doc(db, "users", user.uid, "checkins", d.id))
+      );
+
+      await Promise.all(deletions);
+
+      // reset React state so UI updates immediately
+      setCheckins([]);
+
+      console.log("All check-ins deleted.");
+    } catch (err) {
+      console.error("Failed to reset check-ins:", err);
+    }
+
+    const userRef = doc(db, "users", user.uid);
+
+    try {
+      await updateDoc(userRef, {
+        totalCoins: 0,
+
       });
 
-      return () => unsub();
-    },[]);
 
-
-
-async function handleResetCheckins() {
-  if (!user) return;
-
-  try {
-    const checkinsRef = collection(db, "users", user.uid, "checkins");
-
-    // get all check-in documents
-    const snapshot = await getDocs(checkinsRef);
-
-    // delete each document
-    const deletions = snapshot.docs.map(d => 
-      deleteDoc(doc(db, "users", user.uid, "checkins", d.id))
-    );
-
-    await Promise.all(deletions);
-
-    // reset React state so UI updates immediately
-    setCheckins([]);
-    
-    console.log("All check-ins deleted.");
-  } catch (err) {
-    console.error("Failed to reset check-ins:", err);
+    } catch (err) {
+      console.log("Failed reset totalCoins")
+    }
   }
-
-        const userRef = doc(db,"users", user.uid);
-
-  try {
-        await updateDoc(userRef,{
-            totalCoins:0,
-
-        });
-
-
-  }catch(err){
-    console.log("Failed reset totalCoins")
-  }
-}
 
 
 
 
   return (
     <div>
-    <div className="calendar-container">
-  <Calendar
-    maxDate={new Date()}
-    minDetail="year"
-    onChange={setDate}
-    value={date}
-    tileClassName={({ date: tileDate, view }) => {
-      if (view !== 'month') return null;
+      <div className="calendar-container">
+        <Calendar
+          maxDate={new Date()}
+          minDetail="year"
+          onChange={setDate}
+          value={date}
+          tileClassName={({ date: tileDate, view }) => {
+            if (view !== 'month') return null;
 
-      const dateStr = tileDate.toISOString().split('T')[0];
+            const dateStr = tileDate.toISOString().split('T')[0];
 
-      if (checkins.includes(dateStr)) {
-        return 'checked-in-tile'; // highlight checked-in days
-      }
+            if (checkins.includes(dateStr)) {
+              return 'checked-in-tile'; // highlight checked-in days
+            }
 
-      if (tileDate.toDateString() === new Date().toDateString()) {
-        return 'today-highlight'; // highlight today
-      }
+            if (tileDate.toDateString() === new Date().toDateString()) {
+              return 'today-highlight'; // highlight today
+            }
 
-      return null;
-    }}
-  />
-</div>
+            return null;
+          }}
+        />
+      </div>
 
 
       <div className="checkin-btn-container">
-      <CheckInButton className="checkin-btn" onClick={handleCheckIn} disabled={isCheckedIn}>
-        {isCheckedIn ? 'CHECKED IN' : 'CHECK IN'}
-      </CheckInButton>
+        <CheckInButton className="checkin-btn" onClick={handleCheckIn} disabled={isCheckedIn}>
+          {isCheckedIn ? 'CHECKED IN' : 'CHECK IN'}
+        </CheckInButton>
 
       </div>
-       <button className="reset-button" onClick={handleResetCheckins}>RESET</button>
+      <button className="reset-button" onClick={handleResetCheckins}>RESET</button>
     </div>
   );
 }

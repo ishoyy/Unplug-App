@@ -5,9 +5,9 @@ export default function Quote() {
   const [author, setAuthor] = useState("");
   const [isVisible, setIsVisible] = useState(true);
 
-  
+
   useEffect(() => {
-    fetch("http://api.quotable.io/random?maxLength=100") 
+    fetch("http://api.quotable.io/random?maxLength=100")
       .then(res => res.json())
       .then(data => {
         setQuote(data.content)
@@ -21,10 +21,10 @@ export default function Quote() {
 
   return (
     <div className="quote">
-      <p style={{ fontFamily:"courier",fontSize: "1rem", fontStyle: "italic" }}>
+      <p style={{ fontFamily: "courier", fontSize: "1rem", fontStyle: "italic" }}>
         "{quote}"
       </p>
-      <p style={{ fontFamily:"courier",fontWeight: "bold"}}>
+      <p style={{ fontFamily: "courier", fontWeight: "bold" }}>
         — {author}
       </p>
     </div>

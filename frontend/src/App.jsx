@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Link } from 'react-router-dom';
 import Home from "./pages/Home"
 import List from "./pages/List"
@@ -8,19 +8,19 @@ import List from "./pages/List"
 function App() {
 
   return (
-   <div>
-    <nav>
+    <div>
+      <nav>
 
-      <Routes>
-      <Route path="/" element={<Home />}  />
-      <Route path="/notebook" element={<List />} />
-      
-
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/notebook" element={<List />} />
 
 
-    </nav>
-   </div>
+        </Routes>
+
+
+      </nav>
+    </div>
   )
 }
 
