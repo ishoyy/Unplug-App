@@ -4,7 +4,7 @@
     width:100%;
     height:100vh;
     border-radius:10px;
-    position:fixed;
+    position:absolute;
     
 }
 
@@ -32,21 +32,21 @@
 }
 .sticky-note{
   width: 9vh;
-  position: fixed;
+  position: absolute;
   top: 2vh;
   left: 16vw;
 }
 
 .notebook{
     width:11vh;
-    position:fixed;
+    position:absolute;
     top:1vh;
     left:8vw;;
 
 }
 .house{
     width:15vh;
-    position:fixed;
+    position:absolute;
     top:0vh;
 }
 

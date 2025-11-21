@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.24.0",
-    "firebase": "^12.5.0"
+    "canvas-confetti": "^1.9.4",
+    "firebase": "^12.5.0",
+    "react-rewards": "^2.1.0"
   }
 }

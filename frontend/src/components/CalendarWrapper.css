@@ -264,3 +264,27 @@ color:rgb(243, 243, 91);
   border-radius: 40%;
 
 }
+
+.reset-button{
+  background-color: #30a291f8;
+  color: rgb(255, 223, 117);
+  font-weight: bold;
+  font-family: courier;
+  border-radius: 12px;
+  padding: 10px 24px;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-left: 48vw;
+  margin-top: 33vh;
+  z-index:9999;
+  font-size:0.8rem;
+  position:absolute
+
+}
+
+ .reset-button:hover{
+    background-color: #98d2e2;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3)
+  }

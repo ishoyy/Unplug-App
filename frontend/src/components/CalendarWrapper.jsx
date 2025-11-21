@@ -3,7 +3,7 @@ import './CalendarWrapper.css';
 import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
-import { doc, setDoc, collection, onSnapshot } from 'firebase/firestore';
+import { doc, setDoc, collection, onSnapshot, updateDoc, deleteDoc,increment, getDocs} from 'firebase/firestore';
 import { db, auth} from "../../../FirebaseConfig"
 import { useAuthState } from "react-firebase-hooks/auth";
 import { onAuthStateChanged } from 'firebase/auth';
@@ -29,6 +29,8 @@ const CheckInButton = styled(Button)({
   },
 });
 
+
+
 export default function CalendarWrapper() {
   const [date, setDate] = useState(new Date());
   const [checkins, setCheckins] = useState([]);
@@ -44,24 +46,44 @@ export default function CalendarWrapper() {
 
 
     if (user) {
+    // build a reference to a document path
+    // users/{userID}/checkins/{selectedDateStr}
+    // checkin -> create date that has its own documnt ID
     const checkInRef = doc(db, "users", user.uid, "checkins", selectedDateStr);
 
-      try {
+      
+    try {
+        // write data to the document at checkInRef {users/{userID}/checkins/{selectedDateStr}}
           await setDoc(checkInRef, {
                 checkedin: true,
-              });
+              }, {merge:true});
 
       } catch(err){
         console.log("Check-in failed");
       }
+
+
+
     }
 
+
+    // if the previous paramater does not include the selected date string, return the array of checkins included prev + sDS
   setCheckins(prev => {
     if (!prev.includes(selectedDateStr)) return [...prev, selectedDateStr];
     return prev;
   });
 
-    console.log("Checked in for", today, "earned ", newCoins, " coins");
+
+    const userRef = doc(db,"users", user.uid);
+
+    try {
+        await setDoc(userRef,{
+            totalCoins: increment(5),
+        },{merge:true});
+    } catch(err){
+      console.log("Saving total coin count failed");
+    }
+
   }
 
   // when a user is logged in, listen ot their check-ins collections
@@ -76,12 +98,13 @@ export default function CalendarWrapper() {
       },
           (err) => console.error('Snapshot error',err)
   );
-
         return () => unsub();
+
       }
   },[user])
 
 
+  // when disconnecting from data in firebase, set checkins to be an emptu arrau
     useEffect(()=> {
       const unsub = onAuthStateChanged(auth, (u) => {
         setCheckins([]);
@@ -89,6 +112,48 @@ export default function CalendarWrapper() {
 
       return () => unsub();
     },[]);
+
+
+
+async function handleResetCheckins() {
+  if (!user) return;
+
+  try {
+    const checkinsRef = collection(db, "users", user.uid, "checkins");
+
+    // get all check-in documents
+    const snapshot = await getDocs(checkinsRef);
+
+    // delete each document
+    const deletions = snapshot.docs.map(d => 
+      deleteDoc(doc(db, "users", user.uid, "checkins", d.id))
+    );
+
+    await Promise.all(deletions);
+
+    // reset React state so UI updates immediately
+    setCheckins([]);
+    
+    console.log("All check-ins deleted.");
+  } catch (err) {
+    console.error("Failed to reset check-ins:", err);
+  }
+
+        const userRef = doc(db,"users", user.uid);
+
+  try {
+        await updateDoc(userRef,{
+            totalCoins:0,
+
+        });
+
+
+  }catch(err){
+    console.log("Failed reset totalCoins")
+  }
+}
+
+
 
 
   return (
@@ -122,7 +187,9 @@ export default function CalendarWrapper() {
       <CheckInButton className="checkin-btn" onClick={handleCheckIn} disabled={isCheckedIn}>
         {isCheckedIn ? 'CHECKED IN' : 'CHECK IN'}
       </CheckInButton>
+
       </div>
+       <button className="reset-button" onClick={handleResetCheckins}>RESET</button>
     </div>
   );
 }
