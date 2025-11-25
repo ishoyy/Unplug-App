@@ -19,10 +19,10 @@ import Sweets from "../images/sweets.png"
 import Wallet from "../images/wallet.png"
 import buyText from "../images/buy.png"
 import confetti from "canvas-confetti";
+import Home from './Home';
 
 
-
-export default function List() {
+export default function List({ totalCoins, setTotalCoins }) {
 
     const [rewards, setRewards] = useState([]);
     const [newReward, setNewReward] = useState("");
@@ -33,9 +33,8 @@ export default function List() {
     const [editCostValue, setEditCostValue] = useState("");
 
     const [enterAmountVisible, setEnterAmountVisible] = useState(true);
-    const [totalCoins, setTotalCoins] = useState(0);
     const [isFading, setIsFading] = useState(false);
-
+    const [localRewards, setLocalRewards] = useState([]);
     const [user] = useAuthState(auth);
     const navigate = useNavigate();
 
@@ -104,19 +103,28 @@ export default function List() {
     // Add reward
     // -------------------------
     async function addReward() {
-        if (!user) return;
+        if (user) {
 
-        if (newReward.trim() === "") return;
+            if (newReward.trim() === "") return;
 
-        const rewardsRef = collection(db, "users", user.uid, "rewards");
+            const rewardsRef = collection(db, "users", user.uid, "rewards");
 
-        await addDoc(rewardsRef, {
-            description: newReward,
-            achieved: false,
-            coinValue: 0,
-        });
+            await addDoc(rewardsRef, {
+                description: newReward,
+                achieved: false,
+                coinValue: 0,
+            });
 
-        setNewReward("");
+        } else {
+             setLocalRewards(prev => [
+                ...prev, {
+                    id: Date.now(), description:newReward, coinValue:0
+                }
+            ]);
+        }
+        ;
+            setNewReward("");
+
     }
 
     // -------------------------
@@ -127,7 +135,7 @@ export default function List() {
 
 
 
-        await deleteDoc(doc(db, "users", user.uid, "rewards", id));
+        deleteDoc(doc(db, "users", user.uid, "rewards", id));
         setEditingIndex(null);
         setEditingValue("");
     }
@@ -173,36 +181,9 @@ export default function List() {
         navigate("/");
     }
 
-    function getTotalCoins() {
-        if (user) {
-            const userRef = doc(db, "users", user.uid);
-
-            return onSnapshot(userRef, (doc) => {
-                if (doc.exists()) {
-                    const coins = doc.data();
-                    setTotalCoins(coins.totalCoins || 0)
-                }
-            })
-        }
-
-    }
 
 
-
-
-    console.log("total coins", totalCoins);
-
-    useEffect(() => {
-        if (!user) {
-            return
-        }
-
-        const unsubscribe = getTotalCoins();
-        return () => unsubscribe && unsubscribe();
-
-    }, [user])
-
-    async function buyReward(rewardVal, reward, totalCoins) {
+    async function buyReward(rewardVal, reward) {
         //totalCoins given by totalCoins
         // reward id given
         // if totalCoins - reward.coinValue >= 0 then
@@ -213,7 +194,6 @@ export default function List() {
 
 
         const userRef = doc(db, "users", user.uid);
-        const ref = doc(db, "users", user.uid, "rewards", reward.id);
 
         if ((totalCoins - rewardVal) >= 0) {
 
@@ -222,23 +202,18 @@ export default function List() {
                 await updateDoc(userRef, {
                     totalCoins: totalDeducted,
                 })
-                setTotalCoins(totalDeducted);
-
-                const rewardDesc = reward.description;
+                totalCoins = totalDeducted;
 
 
-                await handleConfetti();
-                await new Promise(resolve => setTimeout(resolve, 1000)); // 1.5 second delay
-
-                alert("Good job, you've achieved a treat! By all means, " + reward.description + "! ^_^");
+                handleConfetti();
+                await new Promise(resolve => setTimeout(resolve, 800)); // 1.5 second delay
+                alert(`Good job, you've earned a treat! By all means, ${reward.description} ! ^_^`);
                 await deleteReward(reward.id);
-                setBoughtReward(true);
-                setShowPopup(true);
 
 
                 console.log("totalcoins after bought", totalCoins);
             } catch (err) {
-                console.log("cant update totalCoins after buyReward")
+                console.log("error buying reward:", err)
             }
 
 
@@ -253,152 +228,160 @@ export default function List() {
 
 
     return (
-        <div className='list-content'>
-            <div className="treat-list-page">
-                <div className="treat-list">
-                    <button className="back-button" onClick={handleBackButton}><ArrowBackIcon /></button>
+        <div className='bg-content-list'>
+            <div className='list-content'>
+                <div className="treat-list-page">
+                    <div className="treat-list">
+                        <button className="back-button" onClick={handleBackButton}><ArrowBackIcon /></button>
 
 
-                    <div className='user-wallet'>
-                        <img
-                            src={Wallet}
-                            className="wallet"
 
-                        />
-                        <p style={{ fontWeight: "bold", color: "maroon", marginRight: "20px" }}>{totalCoins}</p>
+                        <div className="list-container"> <div className="title"> <img
+                            src={TreatShop}
+                            className="treat-yourself"
 
-                        <img
-                            src={CoinIcon}
-                            className="wallet-coins"
-                        />
+                        /></div>
 
-                    </div>
-
-
-                    <div className="list-container"> <div className="title"> <img
-                        src={TreatShop}
-                        className="treat-yourself"
-
-                    /></div>
-
-                        <img
-                            src={Sweets}
-                            className="sweets"
-
-                        />
-
-                        <div>
-                            <input
-                                type="text"
-                                placeholder="Enter a treat..."
-                                value={newReward}
-                                onChange={(e) => setNewReward(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter") addReward();
-                                }}
-
+                            <img
+                                src={Sweets}
+                                className="sweets"
 
                             />
-                            <button className="add-button" onClick={addReward}>ADD</button>
-                        </div>
-
-                        <ol className='container'>
-                            {rewards.map((reward, index) => (
-                                <li key={reward.id}>
-                                    {editingIndex === index ? (
-                                        <>
-                                            <input
-                                                type="text"
-                                                value={editingValue}
-                                                onChange={(e) => setEditingValue(e.target.value)}
-                                                className='desc'
-                                            />
-
-                                            <button
-                                                className="save-button"
-                                                onClick={() => saveReward(reward)}
-                                            >
-                                                Save
-                                            </button>
-                                            <button
-                                                className="cancel-button"
-                                                onClick={() => {
-                                                    setEditingIndex(null);
-                                                    setEditingValue("");
-                                                }}
-                                            >
-                                                Cancel
-                                            </button>
-                                            <button
-                                                className="delete-button"
-                                                onClick={() => deleteReward(reward.id)
-                                                }
-                                            >
-                                                <DeleteIcon fontSize="small" />
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <span className="text">{reward.description}</span>
 
 
-                                            <img className="coin-icon" src={CoinIcon} />
+                            <div className='user-wallet'>
+                                <img
+                                    src={Wallet}
+                                    className="wallet"
 
-                                            {/* COIN COST INPUT */}
+                                />
+                                <p style={{ fontWeight: "bold", color: "maroon", marginRight: "20px", fontSize:"1.5rem", position:"relative",paddingTop:"2rem"}}>{totalCoins}</p>
 
-                                            <div className="coin-enter-container">
+                                <img
+                                    src={CoinIcon}
+                                    className="wallet-coins"
+                                />
+
+                            </div>
+
+
+                            <div>
+
+                                <input
+                                    type="text"
+                                    placeholder="Enter a treat..."
+                                    value={newReward}
+                                    onChange={(e) => setNewReward(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") addReward();
+                                    }}
+
+
+                                />
+                                <button className="add-button" onClick={addReward}>ADD</button>
+                            </div>
+
+                            <ol className='container'>
+                                {(user ? rewards : localRewards).map((reward, index) => (
+                                   <li key={reward.id}>
+                                        {editingIndex === index ? (
+                                            <>
+
+                                            
                                                 <input
-                                                    type="number"
-                                                    value={
-                                                        editCostIndex === index
-                                                            ? editCostValue
-                                                            : reward.coinValue ?? 0
-                                                    }
-                                                    onChange={(e) => setEditCostValue(e.target.value)}
-                                                    onFocus={() => startEditingCost(index)}
-                                                    className="coin-text"
+                                                    type="text"
+                                                    value={editingValue}
+                                                    onChange={(e) => setEditingValue(e.target.value)}
+                                                    className='desc'
                                                 />
-                                                {enterAmountVisible && editCostIndex === index && (<p className="enter-value" style={{ fontSize: "0.8rem", marginRight: "10px", marginLeft: "10px" }} > Enter value</p>)}
+                                                
 
-                                            </div>
-                                            <div className='icon-container'>
+                                                <button
+                                                    className="save-button"
+                                                    onClick={() => saveReward(reward)}
+                                                >
+                                                    Save
+                                                </button>
+                                                <button
+                                                    className="cancel-button"
+                                                    onClick={() => {
+                                                        setEditingIndex(null);
+                                                        setEditingValue("");
+                                                    }}
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    className="delete-button"
+                                                    onClick={() => deleteReward(reward.id)
+                                                    }
+                                                >
+                                                    <DeleteIcon fontSize="small" />
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className="text">{reward.description}</span>
 
-                                                {/* Save cost button 
+<button
+                                                    className="edit-button"
+                                                    onClick={() => startEditing(index)}
+                                                >
+                                                    <EditIcon fontSize='small' />
+                                                </button>
+                                                <img className="coin-icon" src={CoinIcon} />
+
+                                                {/* COIN COST INPUT */}
+
+                                                <div className="coin-enter-container">
+                                                    <input
+                                                        type="number"
+                                                        value={
+                                                            editCostIndex === index
+                                                                ? editCostValue
+                                                                : reward.coinValue ?? 0
+                                                        }
+                                                        onChange={(e) => setEditCostValue(e.target.value)}
+                                                        onFocus={() => startEditingCost(index)}
+                                                        className="coin-text"
+                                                    />
+                                                    {enterAmountVisible && editCostIndex === index && (<p className="enter-value" style={{ fontSize: "0.8rem", marginRight: "10px", marginLeft: "10px" }} > Enter value</p>)}
+
+                                                </div>
+                                                <div className='icon-container'>
+
+                                                    {/* Save cost button 
                                             If we're on the correct cost index and the cost value is being edited 
                                             or is not empty then show the checkmark icon. clicking it -> saving cost
                                         */}
 
-                                                {editCostIndex === index && editCostValue !== "" &&
-                                                    String(editCostValue) !== String(reward.coinValue ?? 0) && (
-                                                        <img
-                                                            className="check-icon"
-                                                            src={CheckIcon}
-                                                            onClick={() => saveCost(reward)}
-                                                            style={{ cursor: 'pointer' }}
-                                                            alt="Save"
-                                                        />
-                                                    )}
+                                                    {editCostIndex === index && editCostValue !== "" &&
+                                                        String(editCostValue) !== String(reward.coinValue ?? 0) && (
+                                                            <img
+                                                                className="check-icon"
+                                                                src={CheckIcon}
+                                                                onClick={() => saveCost(reward)}
+                                                                style={{ cursor: 'pointer' }}
+                                                                alt="Save"
+                                                            />
+                                                        )}
 
-                                            </div>
+                                                </div>
 
 
 
-                                            <button
-                                                className="edit-button"
-                                                onClick={() => startEditing(index)}
-                                            >
-                                                <EditIcon fontSize='small' />
-                                            </button>
+                                                
 
-                                        </>
+                                            </>
 
-                                    )}
-                                    <img src={buyText} onClick={() => buyReward(reward.coinValue, reward, totalCoins)} className='buy-btn' />
+                                        )}
+                                        <img src={buyText} onClick={() => buyReward(reward.coinValue, reward)} className='buy-btn' />
 
-                                </li>
-                            ))}
+                                    </li>
+                                ))}
 
-                        </ol>
+                            </ol>
+                        </div>
                     </div>
                 </div>
             </div>

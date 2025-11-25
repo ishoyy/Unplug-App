@@ -1,12 +1,17 @@
-
 .list-content {
     background-image: url("../images/list-bg.jpg");
-    min-height: 100vh;
+    height: 150vh;
     width: 100vw;
     background-repeat: no-repeat;
-    background-size: cover; /* Optional: ensures the image covers the whole area */
-    background-attachment:fixed;
+    background-size: cover;
+    background-attachment: fixed;
+    overflow-y:scroll;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    right:1rem;
 }
+
 
 .treat-list{
     font-family:'Courier New', Courier, monospace;
@@ -17,9 +22,6 @@
     align-items:center;
     position:relative;
     flex-direction:column;
-
-    
-    
 }
 
 
@@ -47,7 +49,7 @@ li{
     width:50vw;
     position:relative;
       animation: fadeIn 0.4s ease;
-    overflow:scroll;
+     overflow:scroll;
 
 }
 
@@ -59,6 +61,7 @@ li{
       transform:translateY(-2rem);
 
 }
+
 .list-container{
     margin-top:15px;
     background-image:linear-gradient(to bottom, rgba(255, 207, 104, 0.569), rgba(76, 213, 211, 0.476));
@@ -101,6 +104,9 @@ li{
 .edit-button{
     color:rgb(0, 185, 0);
     background:none;
+    position:absolute;
+    left:0;
+   
 }
 
 input[type="text"]{
@@ -120,8 +126,6 @@ ol{
     left:2vw;
     top:3vh;
     background-color:rgb(255, 164, 60);
-    
-    
 }
 
 .title{
@@ -138,6 +142,7 @@ ol{
     border-radius:5%;
     width:2rem;
     outline:none;
+    margin-right:20px;
 
 }
 
@@ -185,9 +190,8 @@ input::-webkit-inner-spin-button {
 }
 
 .coin-text{
-    border: none; /* Remove default border */
-  border-bottom: 1px solid black; /* Add a bottom border for the field itself */
-    font-size:1.3rem;
+    border: none; 
+  border-bottom: 1px solid black; 
 
 }
 
@@ -218,7 +222,7 @@ input::-webkit-inner-spin-button {
 .user-wallet{
     position:absolute;  
     right:1.5vw;
-    top:-10vh;
+    top:-2vh;
     display:flex;
     align-items:end;
     flex-direction:row-reverse;
@@ -231,7 +235,7 @@ input::-webkit-inner-spin-button {
 
 
 .wallet-coins{
-    width:2rem;
+    width:2.7rem;
     height:100%;
     position:relative;
     padding: 10px;

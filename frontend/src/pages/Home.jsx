@@ -10,7 +10,7 @@ import Signup from "../Signup";
 import { useState, useEffect } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import Stickynote from "../images/stickynote.png"
-import Notebook from "../images/notebook.png"
+import Bakery from "../images/bakery.png"
 import Logo from "../images/logo.png"
 import House from "../images/home.png"
 import { auth } from "../../../FirebaseConfig"
@@ -18,7 +18,8 @@ import { useNavigate } from "react-router-dom"
 import { signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import TextBG from "../images/text-bg.png";
-
+import Wallet from "../images/wallet.png"
+import CoinIcon from "../images/coin.png";
 
 const style = {
   display: "flex",
@@ -35,7 +36,7 @@ const style = {
 
 
 
-export default function Home() {
+export default function Home({ totalCoins }) {
   const [loginIsVisible, setLoginIsVisible] = useState(false);
   const [loginSignupBttnsAreVisible, setLoginSignupBttnsAreVisible] = useState(true);
   const [redirectToLogin, setRedirectToLogin] = useState(false);
@@ -104,12 +105,26 @@ export default function Home() {
 
 
         <img
-          src={Notebook}
+          src={Bakery}
           className="notebook"
           onClick={handleClickNotebook}
 
         />
+        <div className="big-wallet-container">
+          
+          <div className="wallet-container">
+            <img
+              src={Wallet}
+              className="wallet-home"
+            />
+            <img
+            src={CoinIcon}
+            className="coin_icon"
+          />
+            <p className="totalcoins">{totalCoins}</p>
 
+          </div>
+        </div>
 
         <img
           src={Stickynote}
