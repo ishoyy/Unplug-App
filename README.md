@@ -79,7 +79,6 @@ Open the URL shown in your terminal (usually http://localhost:5173).
 
 ## 🤔 Known issues and limitations
 
-- Rewards created by user are not sorted in the order that they are created
 - Users should not be able to check-in for days that are not the current date. This limitation is temporary though, since being able to check-in for past days is useful for testing the featurea of the application for the current release.
 
 ## Contact
