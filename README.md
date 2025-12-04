@@ -1,5 +1,5 @@
 
-# Unplug 🗓️🍬
+# <p align="center"> Unplug 🗓️🍬 </p>
 <p>
 <img width="1441" height="750" alt="image" src="https://github.com/user-attachments/assets/96b7b504-2fe7-473e-98eb-5f22c99bb585" />
 <p>
