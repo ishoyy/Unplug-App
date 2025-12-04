@@ -1,7 +1,7 @@
 
 # Unplug 🗓️🍬
 <p>
-<img width="1441" height="750" alt="image" src="https://github.com/user-attachments/assets/86cbbe0e-5fbf-43e1-afc2-f262762973fc" />
+<img width="1441" height="750" alt="image" src="https://github.com/user-attachments/assets/96b7b504-2fe7-473e-98eb-5f22c99bb585" />
 <p>
   <img width="1441" height="750" alt="image"  src="https://github.com/user-attachments/assets/9f6e086d-136f-48f8-996d-afa55951c169" />
 </p>
@@ -81,3 +81,7 @@ Open the URL shown in your terminal (usually http://localhost:5173).
 
 - Rewards created by user are not sorted in the order that they are created
 - Users should not be able to check-in for days that are not the current date. This limitation is temporary though, since being able to check-in for past days is useful for testing the featurea of the application for the current release.
+
+## Contact
+
+If you'd like to get in touch or give any feedback, please do so at the following email: ishaarifx@gmail.com
